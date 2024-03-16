@@ -18,3 +18,9 @@ $routes->group('panel', function (RouteCollection $routes) {
     $routes->get('Ventas', 'PanelController::ventas');
     $routes->get('configuracion', 'PanelController::configuracion');
 });
+$routes->group('configuracion', function (RouteCollection $routes) {
+    $routes->get('propiedades', 'ConfiguracionController::propiedades');
+    $routes->get('veterinarios', 'ConfiguracionController::veterinarios');
+    $routes->get('vacunas', 'ConfiguracionController::vacunas');
+    $routes->get('productos', 'ConfiguracionController::productos');
+});

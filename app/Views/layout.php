@@ -16,7 +16,7 @@
             background-color: #8c158c !important;
         }
 
-        .font-size-xx-large{
+        .font-size-xx-large {
             font-size: xx-large !important;
         }
     </style>
@@ -41,10 +41,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#"><i class="fa fa-money-bill-1-wave"></i> Hacer Venta</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> Listar Ventas</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-box-open"></i> Gestionar Productos</a></li>
+
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -66,12 +63,15 @@
                             <i class="fa fa-gear"></i> Sistema
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-user-doctor"></i> Veterinarios</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-syringe"></i> Vacunas</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url("configuracion/productos"); ?>"><i class="fa fa-box-open"></i> Gestionar Productos</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url("configuracion/veterinarios"); ?>"><i class="fa fa-user-doctor"></i> Gestionar Veterinarios</a></li>
+                            <!-- 
+                                <li><a class="dropdown-item" href="<?= base_url("configuracion/Vacunas"); ?>"><i class="fa-solid fa-syringe"></i> Gestionar Vacunas</a></li>
+                            -->
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-list-check"></i> Propiedades</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url("configuracion/propiedades"); ?>"><i class="fa fa-list-check"></i> Propiedades del sistema</a></li>
                         </ul>
                     </li>
 
@@ -83,7 +83,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#"><i class="fa fa-id-card"></i> Mi Perfil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-right-from-bracket"></i> Cerrar sesión</a></li>
+                            <li><a class="dropdown-item" href="javascript:logout();"><i class="fa fa-right-from-bracket"></i> Cerrar sesión</a></li>
                         </ul>
                     </li>
                 </div>
@@ -97,6 +97,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
     <script>
+        $.ajaxSetup({
+            error: (xhr, ajaxOptions, errorThrown) => {
+                if (xhr.responseJSON.mensaje instanceof Array) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Ocurrieron los siguientes errores",
+                        html: "-" + Object.values(xhr.responseJSON.mensaje).join("<br>-"),
+                        showCloseButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Ocurrió un error",
+                        html: "-" + xhr.responseJSON.mensaje,
+                        showCloseButton: false
+                    });
+                }
+
+
+            }
+
+        });
+
         let token = localStorage.getItem("token");
         let nombre = localStorage.getItem("nombre");
 
@@ -104,6 +127,11 @@
             location.replace("<?= base_url("/usuario/login"); ?>");
         } else {
             $("#ddUsuario").html(`<i class="fa fa-user"></i> Bienvenido, ${nombre}`);
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.replace("<?= base_url("/usuario/login?") . http_build_query(["mensaje" => "Se cerró su sesión.", "tipo" => "info"]); ?>");
         }
     </script>
     <?= $this->renderSection('script') ?>
