@@ -68,17 +68,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        function checkRedirect() {
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const redirect = urlParams.has('redirect');
-            if (!redirect) {
-                location.href = location.href + "?redirect=<?= $redirect; ?>"
-            }
-
-        }
-
-
         function login() {
             let usuario = $("#txtUsuario").val();
             let clave = $("#txtClave").val();
@@ -108,8 +97,9 @@
                     },
                     success: (data) => {
                         localStorage.setItem("token", data.token);
+                        localStorage.setItem("nombre", data.message.split(", ")[1]);
 
-                        //let timerInterval;
+                        let timerInterval;
                         Swal.fire({
                             icon: "success",
                             title: "Inicio de sesión exitoso",
@@ -132,7 +122,7 @@
                         }).then((result) => {
                             /* Read more about handling dismissals below */
                             if (result.dismiss === Swal.DismissReason.timer) {
-                                location.href = '<?= $redirect ?>';
+                                location.href = '<?= base_url("/panel/home"); ?>';
                             }
                         });
                     },
