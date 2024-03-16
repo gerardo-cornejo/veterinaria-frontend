@@ -8,62 +8,70 @@
 <div class="container">
     <!-- Cuadros-->
     <div class="row">
-        <div class="col-sm-3 mt-2 mb-2">
-            <div class="card bg-transparent border-0">
-                <div class="card-body py-0">
-                    <div class="row text-white">
-                        <div class="col-lg-3 bg-success bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
-                            <i class="fa fa-coins fa-2x"></i>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-6 mt-2 mb-2">
+                    <div class="card bg-transparent border-0">
+                        <div class="card-body py-0">
+                            <div class="row text-white">
+                                <div class="col-lg-3 bg-success bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
+                                    <i class="fa fa-coins fa-2x"></i>
+                                </div>
+                                <div class="col-lg-9 bg-success py-3">Ventas del día<br><span class="font-size-xx-large">999</span></div>
+                            </div>
                         </div>
-                        <div class="col-lg-9 bg-success py-3">Ventas del día<br><span class="font-size-xx-large">999</span></div>
+                    </div>
+                </div>
+
+                <div class="col-6 mt-2 mb-2">
+                    <div class="card bg-transparent border-0">
+                        <div class="card-body py-0">
+                            <div class="row text-white">
+                                <div class="col-lg-3 bg-secondary bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
+                                    <i class="fa fa-basket-shopping fa-2x"></i>
+
+                                </div>
+                                <div class="col-lg-9 bg-secondary py-3">Ventas del mes<br><span class="font-size-xx-large">19</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-6 mt-2 mb-2">
+                    <div class="card bg-transparent border-0">
+                        <div class="card-body py-0">
+                            <div class="row text-white">
+                                <div class="col-lg-3 bg-warning bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
+                                    <i class="fa fa-calendar-week fa-2x"></i>
 
-        <div class="col-sm-3 mt-2 mb-2">
-            <div class="card bg-transparent border-0">
-                <div class="card-body py-0">
-                    <div class="row text-white">
-                        <div class="col-lg-3 bg-secondary bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
-                            <i class="fa fa-basket-shopping fa-2x"></i>
-
+                                </div>
+                                <div class="col-lg-9 bg-warning py-3">Citas para hoy<br><span class="font-size-xx-large">19</span></div>
+                            </div>
                         </div>
-                        <div class="col-lg-9 bg-secondary py-3">Ventas del mes<br><span class="font-size-xx-large">19</span></div>
+                    </div>
+                </div>
+
+                <div class="col-6 mt-2 mb-2 ">
+                    <div class="card bg-transparent border-0">
+                        <div class="card-body py-0">
+                            <div class="row text-white">
+                                <div class="col-lg-3 bg-primary bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
+                                    <i class="fa fa-user-doctor fa-2x"></i>
+
+                                </div>
+                                <div class="col-lg-9 bg-primary py-3">Veterinarios<br><span class="font-size-xx-large">19</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-3 mt-2 mb-2">
-            <div class="card bg-transparent border-0">
-                <div class="card-body py-0">
-                    <div class="row text-white">
-                        <div class="col-lg-3 bg-warning bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
-                            <i class="fa fa-calendar-week fa-2x"></i>
-
-                        </div>
-                        <div class="col-lg-9 bg-warning py-3">Citas para hoy<br><span class="font-size-xx-large">19</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3 mt-2 mb-2 ">
-            <div class="card bg-transparent border-0">
-                <div class="card-body py-0">
-                    <div class="row text-white">
-                        <div class="col-lg-3 bg-primary bg-opacity-75 py-3 text-center d-inline-flex flex-column justify-content-around">
-                            <i class="fa fa-user-doctor fa-2x"></i>
-
-                        </div>
-                        <div class="col-lg-9 bg-primary py-3">Veterinarios<br><span class="font-size-xx-large">19</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+
 
     <!--Citas-->
     <div class="row mt-2">
