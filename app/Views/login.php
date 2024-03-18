@@ -24,8 +24,9 @@
                     <form>
                         <?php
                         if (isset($_GET["mensaje"])) {
+                            $tipo = $_GET["tipo"] ?? "info";
                         ?>
-                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <div class="alert alert-<?= $tipo ?> alert-dismissible fade show" role="alert">
                                 <strong>Mensaje:</strong> <?= $_GET["mensaje"] ?>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
@@ -98,6 +99,9 @@
                     success: (data) => {
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("nombre", data.message.split(", ")[1]);
+                        localStorage.setItem("empresa", JSON.stringify(data.empresa));
+
+
 
                         let timerInterval;
                         Swal.fire({

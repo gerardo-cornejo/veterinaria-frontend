@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/3.0.0/css/responsive.dataTables.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/3.0.0/css/responsive.bootstrap.css">
     <style>
         nav.navbar {
             background-color: #8c158c !important;
@@ -19,6 +20,11 @@
         .font-size-xx-large {
             font-size: xx-large !important;
         }
+
+        .dt-input {
+            margin-right: 5px !important;
+            margin-left: 5px !important;
+        }
     </style>
     <?= $this->renderSection('header') ?>
 </head>
@@ -26,8 +32,9 @@
 <body class="bg-secondary bg-opacity-10">
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand text-white" href="#">
-                <i class="fa fa-paw"></i> <?= NOMBRE_APP; ?>
+            <a class="navbar-brand text-white d-flex align-items-center" href="<?= base_url("/"); ?>">
+                <img id="imgLogo" class="me-1" src="" alt="" style="width: 25px; height: 25px;">
+                <span id="txtRazonSocial">Nombre de Empresa</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -82,6 +89,9 @@
                             Hola, {{usuario }}!
                         </a>
                         <ul class="dropdown-menu">
+                            <li>
+                                <h6 id="txtNombreFormal" class="dropdown-header text-black-50"></h6>
+                            </li>
                             <li><a class="dropdown-item" href="#"><i class="fa fa-id-card"></i> Mi Perfil</a></li>
                             <li><a class="dropdown-item" href="javascript:logout();"><i class="fa fa-right-from-bracket"></i> Cerrar sesión</a></li>
                         </ul>
@@ -96,23 +106,36 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.0/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="<?= base_url("js/validations.js") ?>"></script>
     <script>
         $.ajaxSetup({
             error: (xhr, ajaxOptions, errorThrown) => {
-                if (xhr.responseJSON.mensaje instanceof Array) {
+                console.log("xhr", xhr);
+                console.log("ajaxOptions", ajaxOptions);
+                console.log("errorThrown", errorThrown);
+                if (xhr.responseJSON.mensajes instanceof Array) {
                     Swal.fire({
                         icon: "error",
                         title: "Ocurrieron los siguientes errores",
-                        html: "-" + Object.values(xhr.responseJSON.mensaje).join("<br>-"),
+                        html: "-" + Object.values(xhr.responseJSON.mensajes).join("<br>-"),
                         showCloseButton: false
                     });
                 } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Ocurrió un error",
-                        html: "-" + xhr.responseJSON.mensaje,
-                        showCloseButton: false
-                    });
+                    if (xhr.responseJSON.mensajes.indexOf("Expired token") >= 0 && xhr.status == 401) {
+                        location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Su sesión expiró. Inicie sesión nuevamente.", "tipo" => "warning"]); ?>");
+                        localStorage.clear();
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Ocurrió un error",
+                            html: "-" + xhr.responseJSON.mensajes,
+                            showCloseButton: false
+                        });
+                    }
+
+
                 }
 
 
@@ -122,16 +145,21 @@
 
         let token = localStorage.getItem("token");
         let nombre = localStorage.getItem("nombre");
+        let empresa = JSON.parse(localStorage.getItem("empresa"));
 
         if (token == null || nombre == null) {
-            location.replace("<?= base_url("/usuario/login"); ?>");
+            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Debes iniciar sesión para continuar", "tipo" => "warning"]); ?>");
         } else {
             $("#ddUsuario").html(`<i class="fa fa-user"></i> Bienvenido, ${nombre}`);
+            $("#imgLogo").attr("src", empresa.logo);
+            $("#imgLogo").attr("alt", empresa.razon_social);
+            $("#txtRazonSocial").text(empresa.razon_social);
+            $("#txtNombreFormal").text(empresa.nombre_formal);
         }
 
         function logout() {
             localStorage.clear();
-            location.replace("<?= base_url("/usuario/login?") . http_build_query(["mensaje" => "Se cerró su sesión.", "tipo" => "info"]); ?>");
+            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Se cerró su sesión.", "tipo" => "info"]); ?>");
         }
     </script>
     <?= $this->renderSection('script') ?>
