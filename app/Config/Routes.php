@@ -5,6 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+$routes->get("/", "Home::index");
 
 $routes->group("usuario", function (RouteCollection $routes) {
     $routes->get('login', 'UsuarioController::login');
