@@ -21,7 +21,7 @@ $routes->group('panel', function (RouteCollection $routes) {
 });
 $routes->group('configuracion', function (RouteCollection $routes) {
     $routes->get('propiedades', 'ConfiguracionController::propiedades');
-    $routes->get('veterinarios', 'ConfiguracionController::veterinarios');
+    $routes->get('usuarios', 'ConfiguracionController::usuarios');
     $routes->get('vacunas', 'ConfiguracionController::vacunas');
     $routes->get('productos', 'ConfiguracionController::productos');
 });

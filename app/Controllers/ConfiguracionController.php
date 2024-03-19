@@ -11,4 +11,8 @@ class ConfiguracionController extends BaseController
     {
         return view("configuracion/propiedades");
     }
+    public function usuarios()
+    {
+        return view("configuracion/usuarios");
+    }
 }

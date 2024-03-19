@@ -111,12 +111,10 @@
                 },
                 data: data,
                 beforeSend: () => {
-
-                    Swal.showLoading();
                     Swal.fire({
                         title: "Cargando..."
                     });
-
+                    Swal.showLoading();
                 },
                 success: (data) => {
                     console.log(data);
@@ -144,10 +142,10 @@
             },
             beforeSend: () => {
                 table.clear().draw();
-                Swal.showLoading();
                 Swal.fire({
                     title: "Cargando..."
                 });
+                Swal.showLoading();
 
             },
             success: (data) => {

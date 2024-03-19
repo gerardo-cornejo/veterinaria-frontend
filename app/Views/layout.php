@@ -71,7 +71,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="<?= base_url("configuracion/productos"); ?>"><i class="fa fa-box-open"></i> Gestionar Productos</a></li>
-                            <li><a class="dropdown-item" href="<?= base_url("configuracion/veterinarios"); ?>"><i class="fa fa-user-doctor"></i> Gestionar Veterinarios</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url("configuracion/usuarios"); ?>"><i class="fa fa-user-doctor"></i> Gestionar de Usuarios</a></li>
                             <!-- 
                                 <li><a class="dropdown-item" href="<?= base_url("configuracion/Vacunas"); ?>"><i class="fa-solid fa-syringe"></i> Gestionar Vacunas</a></li>
                             -->
@@ -110,7 +110,28 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url("js/validations.js") ?>"></script>
     <script>
+        let token = localStorage.getItem("token");
+        let nombre = localStorage.getItem("nombre");
+        let empresa = JSON.parse(localStorage.getItem("empresa"));
+
+        if (token == null || nombre == null) {
+            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Debes iniciar sesión para continuar", "tipo" => "warning"]); ?>");
+        } else {
+            $("#ddUsuario").html(`<i class="fa fa-user"></i> Bienvenido, ${nombre}`);
+            $("#imgLogo").attr("src", empresa.logo);
+            $("#imgLogo").attr("alt", empresa.razon_social);
+            $("#txtRazonSocial").text(empresa.razon_social);
+            $("#txtNombreFormal").text(empresa.nombre_formal);
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Se cerró su sesión.", "tipo" => "info"]); ?>");
+        }
         $.ajaxSetup({
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
             error: (xhr, ajaxOptions, errorThrown) => {
                 console.log("xhr", xhr);
                 console.log("ajaxOptions", ajaxOptions);
@@ -142,25 +163,6 @@
             }
 
         });
-
-        let token = localStorage.getItem("token");
-        let nombre = localStorage.getItem("nombre");
-        let empresa = JSON.parse(localStorage.getItem("empresa"));
-
-        if (token == null || nombre == null) {
-            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Debes iniciar sesión para continuar", "tipo" => "warning"]); ?>");
-        } else {
-            $("#ddUsuario").html(`<i class="fa fa-user"></i> Bienvenido, ${nombre}`);
-            $("#imgLogo").attr("src", empresa.logo);
-            $("#imgLogo").attr("alt", empresa.razon_social);
-            $("#txtRazonSocial").text(empresa.razon_social);
-            $("#txtNombreFormal").text(empresa.nombre_formal);
-        }
-
-        function logout() {
-            localStorage.clear();
-            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Se cerró su sesión.", "tipo" => "info"]); ?>");
-        }
     </script>
     <?= $this->renderSection('script') ?>
 </body>

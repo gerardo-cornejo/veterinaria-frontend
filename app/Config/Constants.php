@@ -94,3 +94,4 @@ define('EVENT_PRIORITY_NORMAL', 100);
 define('EVENT_PRIORITY_HIGH', 10);
 
 define("NOMBRE_APP", "SisVet");
+define("ENDPOINT_USERS", "https://innite-users-dev.innite.net");
