@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class UsuarioController extends BaseController
 {
@@ -15,5 +14,10 @@ class UsuarioController extends BaseController
     public function listar()
     {
         return view("usuario/listar");
+    }
+
+    public function mi_perfil()
+    {
+        return view("configuracion/miperfil");
     }
 }

@@ -82,7 +82,7 @@
             } else {
                 $.ajax({
                     method: "POST",
-                    url: "https://innite-users-dev.innite.net/usuario/login",
+                    url: "<?= ENDPOINT ?>/usuario/login",
                     data: {
                         usuario: usuario,
                         clave: clave
@@ -133,23 +133,12 @@
                     error: (xhr, ajaxOptions, errorThrown) => {
                         console.log(xhr);
 
-                        if (xhr.responseJSON.mensaje instanceof Array) {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Error",
-                                html: "-" + Object.values(xhr.responseJSON.mensaje).join("<br>-"),
-                                showCloseButton: false
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Error",
-                                html: "-" + xhr.responseJSON.mensaje,
-                                showCloseButton: false
-                            });
-                        }
-
-
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            html: "-" + Object.values(xhr.responseJSON.mensajes).join("<br>-"),
+                            showCloseButton: false
+                        });
                     }
 
                 });

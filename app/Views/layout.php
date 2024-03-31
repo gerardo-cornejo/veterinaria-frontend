@@ -79,6 +79,11 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" href="<?= base_url("configuracion/propiedades"); ?>"><i class="fa fa-list-check"></i> Propiedades del sistema</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="<?= base_url("configuracion/suscripcion"); ?>"><i class="fa fa-ticket"></i> Suscripciones</a></li>
+
                         </ul>
                     </li>
 
@@ -92,7 +97,7 @@
                             <li>
                                 <h6 id="txtNombreFormal" class="dropdown-header text-black-50"></h6>
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-id-card"></i> Mi Perfil</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url("usuario/mi-perfil"); ?>"><i class="fa fa-id-card"></i> Mi Perfil</a></li>
                             <li><a class="dropdown-item" href="javascript:logout();"><i class="fa fa-right-from-bracket"></i> Cerrar sesión</a></li>
                         </ul>
                     </li>
@@ -110,60 +115,48 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url("js/validations.js") ?>"></script>
     <script>
-        let token = localStorage.getItem("token");
-        let nombre = localStorage.getItem("nombre");
-        let empresa = JSON.parse(localStorage.getItem("empresa"));
-
-        if (token == null || nombre == null) {
-            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Debes iniciar sesión para continuar", "tipo" => "warning"]); ?>");
-        } else {
-            $("#ddUsuario").html(`<i class="fa fa-user"></i> Bienvenido, ${nombre}`);
-            $("#imgLogo").attr("src", empresa.logo);
-            $("#imgLogo").attr("alt", empresa.razon_social);
-            $("#txtRazonSocial").text(empresa.razon_social);
-            $("#txtNombreFormal").text(empresa.nombre_formal);
+        function redirectToLogin(message, type) {
+            localStorage.clear();
+            let queryParams = $.param({
+                mensaje: message,
+                tipo: type
+            });
+            location.replace("<?= base_url("/usuario/login") ?>" + "?" + queryParams);
         }
 
         function logout() {
             localStorage.clear();
-            location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Se cerró su sesión.", "tipo" => "info"]); ?>");
+            redirectToLogin("Su sesión ha expirado.", "warning");
         }
-        $.ajaxSetup({
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-            error: (xhr, ajaxOptions, errorThrown) => {
-                console.log("xhr", xhr);
-                console.log("ajaxOptions", ajaxOptions);
-                console.log("errorThrown", errorThrown);
-                if (xhr.responseJSON.mensajes instanceof Array) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Ocurrieron los siguientes errores",
-                        html: "-" + Object.values(xhr.responseJSON.mensajes).join("<br>-"),
-                        showCloseButton: false
-                    });
-                } else {
-                    if (xhr.responseJSON.mensajes.indexOf("Expired token") >= 0 && xhr.status == 401) {
-                        location.replace("<?= base_url("/usuario/login") . "?" . http_build_query(["mensaje" => "Su sesión expiró. Inicie sesión nuevamente.", "tipo" => "warning"]); ?>");
-                        localStorage.clear();
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Ocurrió un error",
-                            html: "-" + xhr.responseJSON.mensajes,
-                            showCloseButton: false
-                        });
-                    }
 
+        let token, empresa, nombre;
+        $(document).ready(function() {
+            token = localStorage.getItem("token");
+            nombre = localStorage.getItem("nombre");
+            empresa = JSON.parse(localStorage.getItem("empresa"));
 
-                }
-
-
+            if (token == null || nombre == null) {
+                redirectToLogin("Debes iniciar sesión para continuar", "warning");
+            } else {
+                $("#ddUsuario").html(`<i class="fa fa-user"></i> Bienvenido, ${nombre}`);
+                $("#imgLogo").attr({
+                    "src": empresa.logo,
+                    "alt": empresa.razon_social
+                });
+                $("#txtRazonSocial").text(empresa.razon_social);
+                $("#txtNombreFormal").text(empresa.nombre_formal);
             }
 
+            $.ajaxSetup({
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                beforeSend: mostrarCargando,
+                error: mostrarError
+            });
         });
     </script>
+    <script src="<?= base_url("js/ajax-messages.js") ?>"></script>
     <?= $this->renderSection('script') ?>
 </body>
 

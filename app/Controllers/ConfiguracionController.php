@@ -15,4 +15,14 @@ class ConfiguracionController extends BaseController
     {
         return view("configuracion/usuarios");
     }
+
+    public function productos()
+    {
+        return view("configuracion/productos");
+    }
+
+    public function suscripcion()
+    {
+        return view("configuracion/suscripcion");
+    }
 }
