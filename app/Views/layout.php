@@ -126,7 +126,7 @@
 
         function logout() {
             localStorage.clear();
-            redirectToLogin("Su sesión ha expirado.", "warning");
+            redirectToLogin("Se cerró su sesión", "success");
         }
 
         let token, empresa, nombre;
