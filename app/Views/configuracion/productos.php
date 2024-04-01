@@ -85,6 +85,8 @@
 <?= $this->section('script') ?>
 <script>
     let table;
+    let productos;
+    let producto;
 
     $(document).ready(() => {
         table = new DataTable("#tblProductos", {
@@ -98,11 +100,12 @@
         $.ajax({
             method: "get",
             url: "<?= ENDPOINT ?>/productos/listar/" + empresa.id,
+            beforeSend: mostrarCargando(false),
             success: (data) => {
+                productos = data.lista;
                 for (const producto of data.lista) {
-                    console.log(producto);
                     table.row.add([
-                        `<img class="img-thumbnail" style="width:64px; height: 64px;" alt="CANBO DOG CORDERO CACHORRO RAZA PEQUEÑA 1kg" src="${producto.imagen}">`,
+                        `<img class="img-thumbnail" style="width:64px; height: 64px;" alt="${producto.nombre}" src="${producto.imagen}">`,
                         `
                             <strong>Nombre: </strong>${producto.nombre}<br>
                             <strong>Precio: </strong>S/. ${Number(producto.precio).toFixed(2)}<br>
@@ -110,9 +113,9 @@
                         `,
                         `
                             <div class="btn-group">
-                                <button class="btn btn-info"><i class="fa fa-eye text-white"></i></button>
+                                <button  class="btn btn-info"><i class="fa fa-eye text-white"></i></button>
                                 <button class="btn btn-warning"><i class="fa fa-pen text-white"></i></button>
-                                <button class="btn btn-danger"><i class="fa fa-trash text-white"></i></button>
+                                <button onclick="eliminar(${producto.id})" class="btn btn-danger"><i class="fa fa-trash text-white"></i></button>
                             </div>
                         `
                     ]).draw();
@@ -158,7 +161,7 @@
             data.append("id_empresa", empresa.id);
             data.append("nombre", nombre);
             data.append("precio", precio);
-            data.append("imgProducto", files[0]);
+            data.append("imgProducto", files[0], );
             data.append("stock", stock);
 
             $.ajax({
@@ -169,10 +172,49 @@
                 processData: false, // Indica a jQuery que no procese los datos
                 success: function(response) {
                     console.log(response);
+
+                    if (response.id) {
+                        $("#exampleModal").modal('hide');
+                        Swal.fire({
+                            icon: "success",
+                            title: "Éxito",
+                            text: "Producto creado con éxito."
+
+                        });
+                    }
+                    cargarProductos();
                 }
             });
         }
 
+    }
+
+    function eliminar(id) {
+        producto = productos.filter(prod => prod.id == id)[0];
+
+        Swal.fire({
+            title: `¿Eliminar ${producto.nombre}?`,
+            html: `Confirma la acción.`,
+            icon: "warning",
+            imageUrl: producto.imagen,
+            imageWidth: 64,
+            imageHeight: 64,
+            imageAlt: "Custom image",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Eliminar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method: "delete",
+                    url: `<?= ENDPOINT ?>/productos/eliminar/${producto.id}`,
+                    success: (data) => {
+                        cargarProductos();
+                    }
+                });
+            }
+        });
     }
 </script>
 
