@@ -12,7 +12,7 @@
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <h4><i class="fa fa-box"></i> Mis Productos</h4>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-plus"></i> Nuevo Producto</button>
+                <button onclick="reset();" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-plus"></i> Nuevo Producto</button>
             </div>
         </div>
         <div class="card-body">
@@ -45,14 +45,14 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <h6>Seleccione imagen de producto</h6>
+                    <div class="col-md-3">
+                        <h6 id="lblImagen">Seleccione imagen de producto</h6>
                         <div class="text-center">
                             <img class="img-thumbnail" style="max-height: 150px;" id="imgProducto" src="<?= ENDPOINT ?>/imagenes/productos/producto.jpg" alt="#">
                         </div>
                         <input class="form-control form-control-sm mt-2" type="file" id="inputProducto" accept="image/png, image/gif, image/jpeg">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <h6>Información del producto</h6>
                         <div class="row">
                             <div class="col-12">
@@ -113,8 +113,8 @@
                         `,
                         `
                             <div class="btn-group">
-                                <button  class="btn btn-info"><i class="fa fa-eye text-white"></i></button>
-                                <button class="btn btn-warning"><i class="fa fa-pen text-white"></i></button>
+                                <button onclick="mostrar(${producto.id})"  class="btn btn-info"><i class="fa fa-eye text-white"></i></button>
+                                <button onclick="editar(${producto.id})" class="btn btn-warning"><i class="fa fa-pen text-white"></i></button>
                                 <button onclick="eliminar(${producto.id})" class="btn btn-danger"><i class="fa fa-trash text-white"></i></button>
                             </div>
                         `
@@ -150,23 +150,27 @@
         let precio = $("#txtPrecio").val();
         let stock = $("#txtStock").val();
         let files = document.getElementById("inputProducto").files;
-        if (!nombre || !precio || !stock || !files.length) {
+
+        if (!nombre || !precio || !stock) {
             Swal.fire({
                 icon: "warning",
                 title: "Faltan datos",
-                text: "Debe ingresar el nombre, precio, stock y una imagen para el producto."
-            })
+                text: "Debe ingresar el nombre, precio y el stock. Si no ingresa imagen, no se reemplazará."
+            });
         } else {
             let data = new FormData();
             data.append("id_empresa", empresa.id);
             data.append("nombre", nombre);
             data.append("precio", precio);
-            data.append("imgProducto", files[0], );
+            data.append("imgProducto", files.length > 0 ? files[0] : null);
             data.append("stock", stock);
+            if (producto != null) {
+                data.append("id_producto", producto.id);
+            }
 
             $.ajax({
                 method: "post",
-                url: `<?= ENDPOINT ?>/productos/nuevo`,
+                url: `<?= ENDPOINT ?>/productos/${producto==null?'nuevo':'editar'}`,
                 data: data,
                 contentType: false, // Indica a jQuery que no configure el Content-Type
                 processData: false, // Indica a jQuery que no procese los datos
@@ -190,7 +194,7 @@
     }
 
     function eliminar(id) {
-        producto = productos.filter(prod => prod.id == id)[0];
+        producto = productos.find(prod => prod.id == id);
 
         Swal.fire({
             title: `¿Eliminar ${producto.nombre}?`,
@@ -199,7 +203,7 @@
             imageUrl: producto.imagen,
             imageWidth: 64,
             imageHeight: 64,
-            imageAlt: "Custom image",
+            imageAlt: producto.nombre,
             showCancelButton: true,
             confirmButtonColor: "#d33",
             cancelButtonColor: "#3085d6",
@@ -215,6 +219,51 @@
                 });
             }
         });
+    }
+
+    function mostrar(id) {
+        producto = productos.find(prod => prod.id == id);
+        $("#exampleModal").modal('show');
+        $("#txtNombre").val(producto.nombre);
+        $("#txtNombre").attr("readonly", "readonly");
+        $("#txtPrecio").val(producto.precio);
+        $("#txtPrecio").attr("readonly", "readonly");
+        $("#txtStock").val(producto.stock);
+        $("#txtStock").attr("readonly", "readonly");
+        $("#imgProducto").attr("src", producto.imagen);
+
+        $("#inputProducto").addClass("d-none");
+        $("#btnGuardar").addClass("d-none");
+        $("#lblImagen").text("Imagen de Producto");
+        $("#exampleModalLabel").html(`<i class="fa fa-box text-secondary"></i> Información de ${producto.nombre}`);
+
+    }
+
+    function editar(id) {
+        reset();
+        producto = productos.find(prod => prod.id == id);
+        $("#txtNombre").val(producto.nombre);
+        $("#txtPrecio").val(Number(producto.precio).toFixed(2));
+        $("#txtStock").val(producto.stock);
+        $("#imgProducto").attr("src", producto.imagen)
+        $("#exampleModalLabel").html(`<i class="fa fa-box text-secondary"></i> Editando producto ${producto.nombre}`);
+
+        $("#exampleModal").modal('show');
+    }
+
+    function reset() {
+        $("#txtNombre").val("");
+        $("#txtNombre").removeAttr("readonly");
+        $("#txtPrecio").val("");
+        $("#txtPrecio").removeAttr("readonly");
+        $("#txtPrecio").val("");
+        $("#txtStock").removeAttr("readonly");
+        $("#imgProducto").attr("src", `<?= ENDPOINT ?>/imagenes/productos/producto.jpg`);
+        $("#inputProducto").removeClass("d-none");
+        $("#btnGuardar").removeClass("d-none");
+        $("#lblImagen").text("Seleccione imagen de producto");
+        $("#exampleModalLabel").html(`<i class="fa fa-box text-secondary"></i> Nuevo Producto`);
+        producto = null;
     }
 </script>
 
