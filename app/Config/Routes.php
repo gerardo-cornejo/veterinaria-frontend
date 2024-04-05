@@ -16,8 +16,8 @@ $routes->group("usuario", function (RouteCollection $routes) {
 $routes->group('panel', function (RouteCollection $routes) {
     $routes->get('/', 'PanelController::home');
     $routes->get('home', 'PanelController::home');
-    $routes->get('clientes', 'PanelController::clientes');
-    $routes->get('Ventas', 'PanelController::ventas');
+    $routes->get('clientes', 'ClienteController::clientes');
+    $routes->get('ventas', 'PanelController::ventas');
     $routes->get('configuracion', 'PanelController::configuracion');
 });
 $routes->group('configuracion', function (RouteCollection $routes) {

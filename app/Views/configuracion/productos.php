@@ -1,7 +1,7 @@
 <?= $this->extend('layout') ?>
 
 <?= $this->section('header') ?>
-<title>Mis Productos - <?= NOMBRE_APP ?></title>
+<title>Productos - <?= NOMBRE_APP ?></title>
 <?= $this->endSection() ?>
 
 

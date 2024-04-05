@@ -51,11 +51,7 @@
 
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="<?= base_url("/clientes"); ?>" role="button" aria-expanded="false">
-                            <i class="fa fa-person"></i> Clientes
-                        </a>
-                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-calendar-days"></i> Citas
@@ -65,12 +61,22 @@
                             <li><a class="dropdown-item" href="#"><i class="fa fa-calendar-week"></i> Listar Citas</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="<?= base_url("panel/clientes"); ?>" role="button" aria-expanded="false">
+                            <i class="fa fa-person"></i> Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="<?= base_url("configuracion/producto"); ?>" role="button" aria-expanded="false">
+                            <i class="fa fa-box-open"></i> Productos
+                        </a>
+                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-gear"></i> Sistema
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= base_url("configuracion/productos"); ?>"><i class="fa fa-box-open"></i> Gestionar Productos</a></li>
                             <li><a class="dropdown-item" href="<?= base_url("configuracion/usuarios"); ?>"><i class="fa fa-user-doctor"></i> Gestionar de Usuarios</a></li>
                             <!-- 
                                 <li><a class="dropdown-item" href="<?= base_url("configuracion/Vacunas"); ?>"><i class="fa-solid fa-syringe"></i> Gestionar Vacunas</a></li>

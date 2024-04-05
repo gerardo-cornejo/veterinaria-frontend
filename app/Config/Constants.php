@@ -94,4 +94,4 @@ define('EVENT_PRIORITY_NORMAL', 100);
 define('EVENT_PRIORITY_HIGH', 10);
 
 define("NOMBRE_APP", "SisVet");
-define("ENDPOINT", "http://localhost:8081"); //"https://api-innite-projects-dev.innite.net"
+define("ENDPOINT", "http://localhost:8082"); //"https://api-innite-projects-dev.innite.net"
